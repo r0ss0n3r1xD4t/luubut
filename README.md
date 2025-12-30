@@ -40,7 +40,7 @@ Truy cập trang lưu bút tại: [https://luubut.netlify.app/](https://luubut.n
 - Netlify (hosting)
 
 ## Đóng Góp
-Nếu bạn là thành viên của lớp và muốn đóng góp nội dung hoặc chỉnh sửa, vui lòng liên hệ với tôi hehee
+Nếu bạn là thành viên của lớp và muốn đóng góp nội dung hoặc chỉnh sửa, vui lòng liên hệ với tôi heheee
 
 ## Liên Hệ
 Mọi góp ý và thắc mắc xin liên hệ:
