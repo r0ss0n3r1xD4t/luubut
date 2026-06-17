@@ -1,0 +1,13 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  # Tránh react-scripts coi cảnh báo ESLint là lỗi khi Netlify đặt CI=true
+  CI = "false"
+
+# SPA fallback: mọi đường dẫn trả về index.html (an toàn cho tương lai nếu thêm routing)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
