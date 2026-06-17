@@ -1,6 +1,6 @@
 # Lưu Bút Cuối Cấp 3
 
-Truy cập trang lưu bút tại: [https://luubut.netlify.app/](https://luubutc3.netlify.app/)
+Truy cập trang lưu bút tại: [https://luubutc3.netlify.app/](https://luubutc3.netlify.app/)
 
 ## Giới Thiệu
 Đây là trang web lưu bút kỷ niệm những năm tháng học sinh cấp 3 của chúng tôi. Nơi lưu giữ những kỷ niệm đẹp, những lời nhắn nhủ và những tình cảm của tuổi học trò.
