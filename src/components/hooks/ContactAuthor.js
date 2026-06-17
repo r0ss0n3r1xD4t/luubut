@@ -30,25 +30,25 @@ const ContactAuthor = () => {
     },
     {
       icon: <Instagram />,
-      url: "https://www.instagram.com/mrdatdepzai",
+      url: "https://www.instagram.com/datxmilanista.06",
       label: "Instagram",
       color: "#e4405f"
     },
     {
       icon: <GitHub />,
-      url: "https://github.com/mrdatdepzai",
+      url: "https://github.com/r0ss0n3r1xD4t",
       label: "GitHub",
       color: "#333"
     },
     {
       icon: <Email />,
-      url: "mailto:dat037sk@gmail.com",
+      url: "mailto:datxmilanista@gmail.com",
       label: "Email",
       color: "#ea4335"
     },
     {
       icon: <Language />,
-      url: "https://nguyendat.net",
+      url: "https://r0ss0n3r1xd4t.github.io/",
       label: "Website",
       color: "#2196f3"
     }
@@ -75,7 +75,7 @@ const ContactAuthor = () => {
           mb: 2 
         }}>
           <Avatar
-            src="https://img.upanh.tv/2024/11/03/milan.jpg"
+            src={process.env.PUBLIC_URL + "/avt.jpg"}
             sx={{ 
               width: 80, 
               height: 80, 

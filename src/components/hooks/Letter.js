@@ -2,16 +2,15 @@ import React from "react";
 import {
   Card,
   CardContent,
-  CardMedia,
   CardActionArea,
   Collapse,
   Typography,
 } from "@mui/material";
-// import '../css/Letter.css'
+import ImageModal from "./ImageModal";
 
 const Letter = ({ show, data, showLetter }) => {
   return (
-    <Collapse in={!show & showLetter}>
+    <Collapse in={!show && showLetter}>
       <div className="letter-container">
         <Card
           variant="outlined"
@@ -22,10 +21,10 @@ const Letter = ({ show, data, showLetter }) => {
             <CardContent
                 sx={{pt: 3, pb: 3 }}
             >
-                <Typography variant="body1" sx={{ pl: 1, pr: 1, mb:5 }}>
-                    <i>Ngày {data.date.day} tháng {data.date.month} năm {data.date.year}
+                <Typography variant="body1" className="letter-paper-text" sx={{ pl: 1, pr: 1, mb:5 }}>
+                    <span className="letter-date"><i>Ngày {data.date.day} tháng {data.date.month} năm {data.date.year}
                     <br/>
-                    {data.date.hour} giờ {data.date.minute} phút.</i>
+                    {data.date.hour} giờ {data.date.minute} phút.</i></span>
                     <br/>
                     <br/>
                     Gửi<strong> Đạt</strong>
@@ -53,15 +52,15 @@ const Letter = ({ show, data, showLetter }) => {
                     <br/>
                     Kí tên
                     <br/>
-                    <strong>{data.name}</strong>.
+                    <span className="letter-signature">{data.name}</span>.
                 </Typography>
             </CardContent>
-            <CardActionArea>
-            <CardMedia
-              component="img"
-              height="400"
-              image="https://img.upanh.tv/2024/06/05/imaged47490f4a422b73b.png"
+            <CardActionArea sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
+            <ImageModal
+              src={process.env.PUBLIC_URL + "/thank-you.jpg"}
               alt="Klee"
+              className="polaroid"
+              triggerSx={{ width: '90%', maxWidth: 420 }}
             />
           </CardActionArea>
         </Card>

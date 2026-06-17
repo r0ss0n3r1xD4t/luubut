@@ -42,10 +42,7 @@ function App() {
       setAvailable(false);
     }
   }, [localData]);
-  console.clear();
-  console.log("Data: ", data);
-  console.log("Is on development environment: ", onDevelopmentEnv)
-  
+
   return (
     <Theme>
       <HeadCard show={show}
@@ -55,7 +52,7 @@ function App() {
         showLetter={showLetter}
         setShowLetter={setShowLetter} />
       <MusicPlayer/>
-      <Thanks show={show} available={available} data={data} />
+      <Thanks show={show} available={available} data={data} setShowLetter={setShowLetter} />
       <Letter show={show} data={data} showLetter={showLetter} />
       <NameInput nameError={nameError} show={show} setData={setData} data={data} />
       <AboutMe available={available} aboutError={aboutError} show={show} setData={setData} data={data} />

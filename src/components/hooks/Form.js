@@ -12,8 +12,8 @@ const Form = ({ setData, data, available }) => {
             <Typography variant="subtitle2" color="text.secondary">{dc.memories.subtitle}</Typography>
             <Box sx={{ width: { md: '90%' } }}>
               <TextField
-                error={data.memories.length < 5}
-                helperText={data.memories.length < 5 ? dc.memories.memoriesError : ""}
+                error={data.memories.length < 5 && data.memories.length !== 0}
+                helperText={data.memories.length < 5 && data.memories.length !== 0 ? dc.memories.memoriesError : ""}
                 placeholder={dc.memories.placeholder}
                 multiline
                 fullWidth

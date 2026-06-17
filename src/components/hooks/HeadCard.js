@@ -1,19 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
-  CardMedia,
   CardActions,
   Button,
   Typography,
-  Modal,
-  Box,
 } from "@mui/material";
 import dc from "../lib/DataConfig";
 import { useTheme } from '@mui/material/styles';
+import ImageModal from "./ImageModal";
 
 const HeadCard = ({ show, setShow, setData, available, showLetter, setShowLetter }) => {
-  const [openModal, setOpenModal] = useState(false);
   const theme = useTheme();
 
   const handleStart = () => {
@@ -32,28 +29,6 @@ const HeadCard = ({ show, setShow, setData, available, showLetter, setShowLetter
         behavior: 'smooth'
       });
     }, 100);
-  };
-
-  const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxWidth: '90vw',
-    maxHeight: '90vh',
-    bgcolor: theme.palette.mode === 'dark' ? '#1e1e1e' : '#ffffff',
-    boxShadow: theme.palette.mode === 'dark' 
-      ? '0 4px 12px rgba(0,0,0,0.5)'
-      : '0 4px 12px rgba(0,0,0,0.15)',
-    p: 1,
-    outline: 'none',
-    borderRadius: '8px',
-    '& img': {
-      width: '100%',
-      height: 'auto',
-      maxHeight: '85vh',
-      objectFit: 'contain'
-    }
   };
 
   return (
@@ -84,39 +59,11 @@ const HeadCard = ({ show, setShow, setData, available, showLetter, setShowLetter
         }
       }}
     >
-      <CardMedia
-        component="img"
-        height="400"
-        image={dc.headCard.image}
+      <ImageModal
+        src={dc.headCard.image}
         alt="green iguana"
-        sx={{ cursor: 'pointer' }}
-        onClick={() => setOpenModal(true)}
+        triggerSx={{ height: { xs: 280, sm: 400 }, objectFit: "cover" }}
       />
-      <Modal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        aria-labelledby="modal-image"
-        sx={{
-          backdropFilter: 'blur(5px)',
-          transition: 'all 0.3s ease-in-out'
-        }}
-      >
-        <Box sx={{
-          ...modalStyle,
-          bgcolor: theme.palette.mode === 'dark' ? '#1e1e1e' : 'background.paper',
-        }}>
-          <img
-            src={dc.headCard.image}
-            alt="Enlarged view"
-            style={{ 
-              transition: 'transform 0.3s ease-in-out',
-              '&:hover': {
-                transform: 'scale(1.02)'
-              }
-            }}
-          />
-        </Box>
-      </Modal>
       <CardContent>
         <Typography 
           gutterBottom 

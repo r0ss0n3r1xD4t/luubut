@@ -1,32 +1,45 @@
 import React from "react";
 
 import {
-  useMediaQuery,
   CssBaseline,
   ThemeProvider,
   createTheme,
 } from "@mui/material";
-import ThemeButton from "./ThemeButton";
+
+const theme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#6d4c41',
+      dark: '#5d4037',
+    },
+    background: {
+      default: '#fbf6ec',
+      paper: '#fffdf8',
+    },
+  },
+  shape: {
+    borderRadius: 12,
+  },
+  typography: {
+    fontFamily: "'Be Vietnam Pro', system-ui, -apple-system, sans-serif",
+    h5: {
+      fontFamily: "'Dancing Script', cursive",
+      fontWeight: 700,
+      fontSize: '2rem',
+    },
+    h6: {
+      fontFamily: "'Dancing Script', cursive",
+      fontWeight: 700,
+      fontSize: '1.7rem',
+    },
+  },
+});
 
 const Theme = ({ children }) => {
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-    const [modeTheme, setMode] = React.useState(prefersDarkMode);
-    const theme = React.useMemo(
-      () =>
-        createTheme({
-          palette: {
-            mode: modeTheme ? 'dark' : 'light',
-            backgroundColor: {
-              default: modeTheme ? 'dark' : 'white',
-            },
-          },
-        }),
-      [modeTheme],
-    );
   return (
     <ThemeProvider theme={theme}>
         <CssBaseline />
-        <ThemeButton setMode={setMode} modeTheme={modeTheme}/>
         <div className="App">{children}</div>
     </ThemeProvider>
   );

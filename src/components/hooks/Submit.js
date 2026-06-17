@@ -1,7 +1,8 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardMedia, CardActions, CardActionArea, Button, Typography, Collapse } from "@mui/material";
+import { Card, CardContent, CardHeader, CardActions, Button, Typography, Collapse } from "@mui/material";
 import emailjs from "@emailjs/browser";
 import dc from "../lib/DataConfig";
+import ImageModal from "./ImageModal";
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 
 const Submit = ({
@@ -52,9 +53,14 @@ const Submit = ({
     setData({ ...data, date: time });
     localStorage.setItem("data", JSON.stringify({ ...data, date: time }));
 
+    //Bỏ qua gửi email khi đang ở môi trường development
+    if (onDevelopmentEnv) {
+      return;
+    }
+
     //email về email
-   
-      emailjs.send(
+    emailjs
+      .send(
         "service_wx2sjz9",
         "template_85fd4h7",
         {
@@ -70,9 +76,11 @@ const Submit = ({
           point: data.handsome,
         },
         "0jVndDZKFli8zjBvE"
-      );
-    }
-  
+      )
+      .catch((error) => {
+        console.error("Gửi email thất bại:", error);
+      });
+  };
 
   return (
     <Collapse in={available && data.message !== "" && data.message !== undefined ? true : false}>
@@ -89,14 +97,11 @@ const Submit = ({
             subheader={dc.submit.subheader}
             subheaderTypographyProps={{ variant: "subtitle2" }}
           />
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="400"
-              image={dc.submit.image}
-              alt="Klee"
-            />
-          </CardActionArea>
+          <ImageModal
+            src={dc.submit.image}
+            alt="Klee"
+            triggerSx={{ height: { xs: 280, sm: 400 }, objectFit: "cover" }}
+          />
           <CardContent
             sx={{ borderBottom: 1, borderColor: "divider", pt: 3, pb: 3 }}
           >

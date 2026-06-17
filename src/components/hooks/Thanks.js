@@ -1,29 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
-  CardMedia,
   CardActions,
-  CardActionArea,
   Button,
   Collapse,
-  Typography, 
-  Dialog,
+  Typography,
 } from "@mui/material";
+import ImageModal from "./ImageModal";
 
-const Thanks = ({ show, data, available }) => {
-  const [openImage, setOpenImage] = useState(false);
-
-  const handleImageClick = () => {
-    setOpenImage(true);
-  };
-
-  const handleCloseImage = () => {
-    setOpenImage(false);
-  };
-
+const Thanks = ({ show, data, available, setShowLetter }) => {
   const handleReadLetter = () => {
-    console.log("Đọc lại thư");
+    setShowLetter(true);
+    setTimeout(() => {
+      const letter = document.querySelector(".letter-container");
+      if (letter) {
+        letter.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }, 150);
   };
 
   return (
@@ -50,20 +46,16 @@ const Thanks = ({ show, data, available }) => {
                 Cảm ơn {data.name} đã gửi thư cho tớ, chắc là tớ sẽ đọc sớm thôi. Thư gửi tớ k biết có đến tay tớ hay không nhưng mà chắc là có đó. Nếu hong đến được thì chúng ta có thể nói chuyện nhaaa. 😺
               </Typography>
             </CardContent>
-            <CardActionArea onClick={handleImageClick}>
-              <CardMedia
-                component="img"
-                height="400"
-                image="https://img.upanh.tv/2024/06/05/imaged47490f4a422b73b.png"
-                alt="Tớ ngồi code sml"
-                sx={{
-                  transition: "transform 0.3s ease-in-out",
-                  "&:hover": {
-                    transform: "scale(1.05)",
-                  },
-                }}
-              />
-            </CardActionArea>
+            <ImageModal
+              src={process.env.PUBLIC_URL + "/thank-you.jpg"}
+              alt="Tớ ngồi code sml"
+              triggerSx={{
+                height: { xs: 280, sm: 400 },
+                objectFit: "cover",
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": { transform: "scale(1.03)" },
+              }}
+            />
             <CardActions sx={{ pl: 2, pr: 2, pt: 2, pb: 2 }}>
               <Button size="small" color="primary" onClick={handleReadLetter}>
                 Đọc lại thư
@@ -78,19 +70,6 @@ const Thanks = ({ show, data, available }) => {
           </Card>
         </div>
       </Collapse>
-
-      <Dialog
-        open={openImage}
-        onClose={handleCloseImage}
-        maxWidth="xl"
-        fullWidth
-      >
-        <img
-          src="https://img.upanh.tv/2024/06/05/imaged47490f4a422b73b.png"
-          alt="Tớ ngồi code sml"
-          style={{ width: '100%', height: 'auto' }}
-        />
-      </Dialog>
     </>
   );
 };

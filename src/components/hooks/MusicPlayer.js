@@ -1,16 +1,12 @@
 import React, { useState, useRef } from 'react';
 import {
   Card,
-  CardContent,
-  CardMedia,
   Typography,
   Box,
   Button,
-  Modal,
   IconButton,
-  Fade,
   Collapse,
-  CardActionArea
+  Slider,
 } from "@mui/material";
 import {
   Favorite,
@@ -22,20 +18,10 @@ import {
   QueueMusic // Icon cho playlist
 } from '@mui/icons-material';
 import audioFile from './nhac.mp3'; // Thêm import file nhạc
-import styled from '@mui/material/styles/styled';
-
-const StyledBox = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1e1e1e' : '#ffffff',
-  padding: theme.spacing(2),
-  borderRadius: theme.shape.borderRadius,
-  boxShadow: theme.palette.mode === 'dark' 
-    ? 'none' 
-    : '0 2px 4px rgba(0,0,0,0.1)',
-}));
+import ImageModal from './ImageModal';
 
 const MusicPlayer = () => {
   const [playing, setPlaying] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
   const [progress, setProgress] = useState(0);
   const [liked, setLiked] = useState(false);
   const [showLyrics, setShowLyrics] = useState(false);
@@ -49,12 +35,11 @@ const MusicPlayer = () => {
     }
   };
 
-  const handleProgressChange = (e) => {
-    const newProgress = parseFloat(e.target.value);
+  const handleProgressChange = (value) => {
+    const newProgress = Number(value);
     setProgress(newProgress);
-    if (audioRef.current) {
-      const duration = audioRef.current.duration;
-      audioRef.current.currentTime = (newProgress / 100) * duration;
+    if (audioRef.current && audioRef.current.duration) {
+      audioRef.current.currentTime = (newProgress / 100) * audioRef.current.duration;
     }
   };
 
@@ -71,167 +56,160 @@ const MusicPlayer = () => {
     }
   };
 
+  const handlePrev = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      setProgress(0);
+    }
+  };
+
+  const handleNext = () => {
+    if (audioRef.current) {
+      const duration = audioRef.current.duration || 0;
+      audioRef.current.currentTime = Math.min(
+        audioRef.current.currentTime + 10,
+        duration
+      );
+    }
+  };
+
   return (
     <>
-      <Card sx={{ 
-        display: 'flex', 
-        flexDirection: { xs: 'column', md: 'row' }, 
-        mb: 2,
-        alignItems: 'center'
-      }}>
-        <CardActionArea onClick={() => setOpenModal(true)}>
-          <CardMedia
-            component="img"
-            sx={{ width: { xs: '100%', md: 300 } }}
-            image="https://img.upanh.tv/2024/06/05/imagec7ce1dca1af44cfb.png"
-            alt="Live from space album cover"
+      <Card
+        sx={{
+          mb: 3,
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          borderRadius: 3,
+          overflow: 'hidden',
+          boxShadow: 4,
+        }}
+      >
+        {/* Ảnh bìa */}
+        <Box sx={{ width: '100%' }}>
+          <ImageModal
+            src={process.env.PUBLIC_URL + "/music-cover.jpg"}
+            alt="Ảnh bìa bài hát"
+            triggerSx={{ height: { xs: 200, sm: 260 }, objectFit: 'cover' }}
           />
-        </CardActionArea>
+        </Box>
 
-        <StyledBox>
-          <CardContent sx={{ 
-            width: '100%',
+        {/* Thông tin & điều khiển */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            minWidth: 0,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            gap: 1
-          }}>
-            {/* Title and Info */}
-            <Typography variant="h5" component="div" sx={{
-              fontWeight: 500,
-              letterSpacing: 0.5,
+            justifyContent: 'center',
+            p: { xs: 2, md: 3 },
+            gap: 0.5,
+          }}
+        >
+          <Typography
+            variant="h5"
+            component="div"
+            title="Mình cầm băng đóng nhau"
+            sx={{
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              width: '100%',
-              textAlign: 'center'
-            }}>
-              Mình cầm băng đóng nhau
-            </Typography>
-            
-            <Typography variant="subtitle1" color="text.secondary">
-              A12-K4
-            </Typography>
-            
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
-              @mrdatdepzai
-            </Typography>
+              lineHeight: 1.2,
+            }}
+          >
+            Mình cầm băng đóng nhau
+          </Typography>
 
-            {/* Main Controls */}
-            <Box sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: 2, 
-              mb: 2,
-              width: '100%',
-              justifyContent: 'center'
-            }}>
-              <IconButton onClick={() => {}} size="small">
-                <SkipPrevious />
-              </IconButton>
-              <IconButton 
-                onClick={handlePlayPause} 
-                size="large"
+          <Typography
+            variant="subtitle2"
+            color="text.secondary"
+            sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+          >
+            A12-K4 · PHC Quốc Oai, Hà Nội
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            @datxmilanista
+          </Typography>
+
+          {/* Thanh tiến trình */}
+          <Slider
+            aria-label="Tiến trình bài hát"
+            value={progress}
+            onChange={(e, v) => handleProgressChange(v)}
+            size="small"
+            sx={{ mt: 1.5, mb: 0.5 }}
+          />
+
+          {/* Điều khiển */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, flexWrap: 'wrap' }}>
+            <IconButton onClick={handlePrev} size="small">
+              <SkipPrevious />
+            </IconButton>
+            <IconButton
+              onClick={handlePlayPause}
+              sx={{
+                color: '#fff',
+                bgcolor: 'primary.main',
+                '&:hover': { bgcolor: 'primary.dark', transform: 'scale(1.06)' },
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {playing ? <Pause /> : <PlayArrow />}
+            </IconButton>
+            <IconButton onClick={handleNext} size="small">
+              <SkipNext />
+            </IconButton>
+            <IconButton onClick={() => setLiked(!liked)} size="small">
+              {liked ? <Favorite color="error" /> : <FavoriteBorder />}
+            </IconButton>
+
+            <Box sx={{ flexGrow: 1 }} />
+
+            <Button variant="text" size="small" onClick={() => setShowLyrics(!showLyrics)}>
+              {showLyrics ? 'Ẩn lời' : 'Lời bài hát'}
+            </Button>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<QueueMusic />}
+              onClick={() => window.open("https://open.spotify.com/playlist/2ByAJQseXXgs4I0gsjCrko?si=647f46a8e72b45ac", "_blank")}
+            >
+              Playlist
+            </Button>
+          </Box>
+
+          {/* Lời bài hát */}
+          <Collapse in={showLyrics}>
+            <Box sx={{ mt: 1.5, '& .verse': { mb: 2 } }}>
+              <Typography
+                variant="body2"
+                component="div"
                 sx={{
-                  '&:hover': {
-                    transform: 'scale(1.1)',
-                    transition: 'transform 0.2s'
-                  }
+                  whiteSpace: 'pre-line',
+                  lineHeight: 1.8,
+                  fontStyle: 'italic',
+                  color: 'text.secondary',
                 }}
               >
-                {playing ? <Pause /> : <PlayArrow />}
-              </IconButton>
-              <IconButton onClick={() => {}} size="small">
-                <SkipNext />
-              </IconButton>
-              <IconButton onClick={() => setLiked(!liked)} size="small">
-                {liked ? <Favorite color="error" /> : <FavoriteBorder />}
-              </IconButton>
+                <div className="verse">
+                  Mình cùng nhau đóng băng trước giây phút chúng ta chia xa
+                  Thời học sinh lướt qua nhanh như giấc mơ không trở lại
+                  Mình phải trải qua
+                  Bạn đừng khóc mà
+                  Bọn mình sẽ lớn, sẽ đi trên những con đường mới.
+                </div>
+
+                <div className="verse">
+                  Là chưa hôm nào đến lớp sớm như hôm nay
+                  Trời nắng nhẹ, êm đềm, gió lay
+                  Là cảm xúc khó nói chỉ biết đứng ngẩn ngơ
+                  Níu tà áo dài bay bay
+                </div>
+              </Typography>
             </Box>
-
-            {/* Progress Bar */}
-            <Box sx={{ 
-              width: '100%', 
-              mb: 2,
-              px: 2 
-            }}>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={progress}
-                onChange={handleProgressChange}
-                style={{ 
-                  width: '100%',
-                  height: '4px',
-                  borderRadius: '2px',
-                  cursor: 'pointer'
-                }}
-              />
-            </Box>
-
-            {/* Lyrics Toggle & Playlist */}
-            <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
-              <Button 
-                variant="outlined" 
-                size="small"
-                onClick={() => setShowLyrics(!showLyrics)}
-              >
-                {showLyrics ? 'Hide Lyrics' : 'Show Lyrics'}
-              </Button>
-              <Button 
-                variant="outlined" 
-                color="success" 
-                size="small"
-                startIcon={<QueueMusic />}
-                onClick={() => window.open("https://open.spotify.com/playlist/2ByAJQseXXgs4I0gsjCrko?si=647f46a8e72b45ac", "_blank")}
-              >
-                Playlist
-              </Button>
-            </Box>
-
-            {/* Lyrics */}
-            <Collapse in={showLyrics}>
-              <Box sx={{ 
-                textAlign: 'center', 
-                mb: 2,
-                maxWidth: '100%',
-                px: 2,
-                '& .verse': {
-                  mb: 2
-                }
-              }}>
-                <Typography 
-                  variant="body1" 
-                  component="div"
-                  sx={{
-                    whiteSpace: 'pre-line',
-                    lineHeight: 1.8,
-                    fontStyle: 'italic',
-                    color: 'text.secondary'
-                  }}
-                >
-                  <div className="verse">
-                    Mình cùng nhau đóng băng trước giây phút chúng ta chia xa
-                    Thời học sinh lướt qua nhanh như giấc mơ không trở lại
-                    Mình phải trải qua
-                    Bạn đừng khóc mà
-                    Bọn mình sẽ lớn, sẽ đi trên những con đường mới.
-                  </div>
-
-                  <div className="verse">
-                    Là chưa hôm nào đến lớp sớm như hôm nay
-                    Trời nắng nhẹ, êm đềm, gió lay
-                    Là cảm xúc khó nói chỉ biết đứng ngẩn ngơ
-                    Níu tà áo dài bay bay
-                  </div>
-
-                  {/* ... các verse khác tương tự ... */}
-                </Typography>
-              </Box>
-            </Collapse>
-          </CardContent>
-        </StyledBox>
+          </Collapse>
+        </Box>
       </Card>
 
       {/* Audio Element */}
@@ -242,42 +220,6 @@ const MusicPlayer = () => {
         onEnded={() => setPlaying(false)}
         onError={(e) => console.error("Audio error:", e)}
       />
-
-      {/* Image Modal */}
-      <Modal
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        closeAfterTransition
-        sx={{
-          backdropFilter: 'blur(8px)',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        }}
-      >
-        <Fade in={openModal}>
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 'auto',
-            maxWidth: '90vw',
-            maxHeight: '90vh',
-          }}>
-            <img
-              src="https://img.upanh.tv/2024/06/05/imagec7ce1dca1af44cfb.png"
-              alt="Enlarged view"
-              style={{
-                width: '100%',
-                height: 'auto',
-                maxHeight: '90vh',
-                objectFit: 'contain',
-                borderRadius: '8px',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-              }}
-            />
-          </Box>
-        </Fade>
-      </Modal>
     </>
   );
 };
